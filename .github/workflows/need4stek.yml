@@ -9,7 +9,7 @@ on:
       - 'ga-ignore-*'
 
 env:
-  EXECUTABLES: mysh
+  EXECUTABLES: ai
   MIRROR_URL: git@github.com:EpitechPromo2027/B-AIA-200-MAR-2-1-n4s-theo.fabiano.git
 
 jobs:
