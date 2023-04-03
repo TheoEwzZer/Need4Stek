@@ -1,0 +1,70 @@
+name: Need4Stek
+
+on:
+  push:
+    branches-ignore:
+      - 'ga-ignore-*'
+  pull_request:
+    branches-ignore:
+      - 'ga-ignore-*'
+
+env:
+  EXECUTABLES: mysh
+  MIRROR_URL: git@github.com:EpitechPromo2027/B-AIA-200-MAR-2-1-n4s-theo.fabiano.git
+
+jobs:
+  check_coding_style:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/epitech/coding-style-checker:latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Check coding style
+      run: check.sh $(pwd) $(pwd)
+    - name: Display annotations errors
+      run: |
+        if [ -s $(pwd)/coding-style-reports.log ]; then
+          while read ligne; do
+            echo "$ligne" | sed 's/\(.*\):\([0-9]*\): \(.*\):\([^-]*\)-\(.*\)/::error file=\1,line=\2,title=\3 coding style error::\4-\5/'
+          done < $(pwd)/coding-style-reports.log
+          exit 1
+        fi
+  check_program_compilation:
+    runs-on: ubuntu-latest
+    needs: check_coding_style
+    container:
+      image: epitechcontent/epitest-docker:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Make
+        run: make
+        timeout-minutes: 2
+      - name: Make clean
+        run: make clean
+      - name: Check executables
+        run: |
+          EXEC_ARRAY=( $(echo "${{ env.EXECUTABLES }}" | tr ',' ' ') )
+          for executable in "${EXEC_ARRAY[@]}"; do
+            if [ ! -x "$executable" ]; then
+              echo "::error The executable file $executable does not exist or is not executable"
+              exit 1
+            fi
+          done
+  push_to_mirror:
+    runs-on: ubuntu-latest
+    needs: check_program_compilation
+    if: github.event_name == 'push'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Push to mirror
+        uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url: 
+            ${{ env.MIRROR_URL }}
+          ssh_private_key:
+            ${{ secrets.GIT_SSH_PRIVATE_KEY }}
