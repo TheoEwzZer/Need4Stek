@@ -50,7 +50,7 @@ void control_car(car_t *car)
         car->current_speed = speed;
     }
     if (wheels_dir != car->current_wheels_direction) {
-        dprintf(STDOUT_FILENO, "WHEELS_direction:%.2f\n", (double)wheels_dir);
+        dprintf(STDOUT_FILENO, "WHEELS_DIR:%.2f\n", (double)wheels_dir);
         getline(&lineptr, &n, stdin);
         car->current_wheels_direction = wheels_dir;
     }
