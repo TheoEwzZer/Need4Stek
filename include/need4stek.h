@@ -9,6 +9,7 @@
 
     #define NEED4STEK_H_
 
+    #include <stdbool.h>
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
@@ -27,6 +28,7 @@ typedef struct car_s {
 float calculate_speed(car_t *car);
 float calculate_wheels_direction(car_t *car);
 void control_car(car_t *car);
+void end(void) __attribute__((noreturn));
 void parse_lidar_data(char *line, car_t *car);
 void update_car(car_t *car);
 

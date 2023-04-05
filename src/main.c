@@ -7,20 +7,26 @@
 
 #include "need4stek.h"
 
-void parse_lidar_data(char *line, car_t *car)
+void end(void)
 {
     char *lineptr = NULL;
-    char *token = strtok(line, ":");
     size_t n = 0;
+
+    dprintf(STDOUT_FILENO, "CAR_FORWARD:0.0\n");
+    getline(&lineptr, &n, stdin);
+    sleep(1);
+    dprintf(STDOUT_FILENO, "STOP_SIMULATION\n");
+    getline(&lineptr, &n, stdin);
+    exit(0);
+}
+
+void parse_lidar_data(char *line, car_t *car)
+{
+    char *token = strtok(line, ":");
     unsigned int value_id = (unsigned int)atoi(token);
 
-    if (value_id != 1 && value_id != 2 && value_id != 10) {
-        dprintf(STDOUT_FILENO, "CAR_FORWARD:0.0\n");
-        getline(&lineptr, &n, stdin);
-        dprintf(STDOUT_FILENO, "STOP_SIMULATION\n");
-        getline(&lineptr, &n, stdin);
-        exit(84);
-    }
+    if (value_id != 1 && value_id != 2 && value_id != 10)
+        end();
     for (unsigned int i = 0; i < 3; i++) {
         if (i == 1)
             car->status = strdup(token);
@@ -30,12 +36,8 @@ void parse_lidar_data(char *line, car_t *car)
         car->lidar[i] = (float)atof(token);
         token = strtok(NULL, ":");
     }
-    if (!strcmp(token, "Track Cleared")) {
-        dprintf(STDOUT_FILENO, "CAR_FORWARD:0.0\n");
-        getline(&lineptr, &n, stdin);
-        dprintf(STDOUT_FILENO, "STOP_SIMULATION\n");
-        getline(&lineptr, &n, stdin);
-    }
+    if (!strcmp(token, "Track Cleared"))
+        end();
 }
 
 void update_car(car_t *car)
@@ -50,8 +52,6 @@ void update_car(car_t *car)
     car->middle = car->lidar[15];
     car->right = car->lidar[31];
     free(lineptr);
-    if (!strcmp(car->status, "OK"))
-        control_car(car);
 }
 
 int main(void)
@@ -65,6 +65,8 @@ int main(void)
     free(lineptr);
     while (42) {
         update_car(car);
+        if (!strcmp(car->status, "OK"))
+            control_car(car);
     }
     return EXIT_SUCCESS;
 }
