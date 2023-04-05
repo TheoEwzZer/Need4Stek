@@ -9,20 +9,22 @@
 
 float calculate_wheels_direction(car_t *car)
 {
-    float wheels_dir_values[6] = {0.25f, 0.20f, 0.15f, 0.10f, 0.05f, 0.01f};
-    int distance[5] = {400, 500, 700, 1020, 1350};
+    float wheels_dir_values[10] = {
+        0.45f, 0.4f, 0.35f, 0.3f, 0.25f, 0.20f, 0.15f, 0.10f, 0.05f, 0.0f
+    };
+    int distance[9] = {50, 100, 200, 300, 400, 500, 700, 1020, 1350};
 
-    for (unsigned int i = 0; car->right > car->left && i < 5; i++) {
+    for (unsigned int i = 0; car->right > car->left && i < 9; i++) {
         if (car->middle < distance[i])
             return -wheels_dir_values[i];
     }
     if (car->right > car->left)
-        return -wheels_dir_values[5];
-    for (unsigned int i = 0; i < 5; i++) {
+        return -wheels_dir_values[9];
+    for (unsigned int i = 0; i < 9; i++) {
         if (car->middle < distance[i])
             return wheels_dir_values[i];
     }
-    return wheels_dir_values[5];
+    return wheels_dir_values[9];
 }
 
 float calculate_speed(car_t *car)
@@ -51,6 +53,7 @@ void control_car(car_t *car)
     }
     if (wheels_dir != car->current_wheels_direction) {
         dprintf(STDOUT_FILENO, "WHEELS_DIR:%.2f\n", (double)wheels_dir);
+        dprintf(STDERR_FILENO, "WHEELS_DIR:%.2f\n", (double)wheels_dir);
         getline(&lineptr, &n, stdin);
         car->current_wheels_direction = wheels_dir;
     }

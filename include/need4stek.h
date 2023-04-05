@@ -15,12 +15,13 @@
     #include <unistd.h>
 
 typedef struct car_s {
-    float lidar[32];
-    float left;
-    float middle;
-    float right;
+    char *status;
     float current_speed;
     float current_wheels_direction;
+    float left;
+    float lidar[32];
+    float middle;
+    float right;
 } car_t;
 
 float calculate_speed(car_t *car);
