@@ -56,21 +56,21 @@ The command in the _pipes.sh_ script enables you to correctly link the different
 
 The communication is done via a text-type protocol:
 
-```
-command               value range     answer type
-START_SIMULATION           -              (1)
-STOP_SIMULATION            -              (1)
-CAR_FORWARD:float        [0;1]            (1)
-CAR_BACKWARDS:float      [0;1]            (1)
-WHEELS_DIR:float        [-1;1]            (1)
-GET_INFO_LIDAR             -              (2)
-GET_CURRENT_SPEED          -              (3)
-GET_CURRENT_WHEELS         -              (3)
-CYCLE_WAIT:int        [0; INT_MAX]        (3)
-GET_CAR_SPEED_MAX          -              (3)
-GET_CAR_SPEED_MIN          -              (3)
-GET_INFO_SIMTIME           -              (4)
-```
+|      command        | value range | answer type |
+|:-------------------:|:-----------:|:-----------:|
+| START_SIMULATION    |      -      |     (1)     |
+| STOP_SIMULATION     |      -      |     (1)     |
+| CAR_FORWARD:float   |    [0;1]    |     (1)     |
+| CAR_BACKWARDS:float |    [0;1]    |     (1)     |
+| WHEELS_DIR:float    |   [-1;1]    |     (1)     |
+| GET_INFO_LIDAR      |      -      |     (2)     |
+| GET_CURRENT_SPEED   |      -      |     (3)     |
+| GET_CURRENT_WHEELS  |      -      |     (3)     |
+| CYCLE_WAIT:int      | [0; INT_MAX]|     (3)     |
+| GET_CAR_SPEED_MAX   |      -      |     (3)     |
+| GET_CAR_SPEED_MIN   |      -      |     (3)     |
+| GET_INFO_SIMTIME    |      -      |     (3)     |
+
 ```
 All the commands ends with \n and inevitably lead to an answer.
 If n4s doesn’t receive a command, it won’t send out an answer.
@@ -93,44 +93,45 @@ Here are the different answer formats, corresponding to each type:
 **STATUS** is whether “OK” or “KO”. It indicates if the command execution is a success or a failure.
 **CODE_STR** corresponds to the verbal version of VALUE_ID. The different values are also listed below.
 **ADDITIONAL_INFO** can contain information concerning the last checkpoint passed on the track (followed by the id of this checkpoint and the passage timestamp). The four different types of checkpoints are as follows:
-```
-Message             Explanation
-First CP Cleared    first checkpoint passed
-CP Cleared          passing a checkpoint (other than the first and last on the track)
-Lap Cleared         complete lap
-Track Cleared       end of the race. You need to stop the car and the simulation
-```
+
+|     Message     |                            Explanation                           |
+|:---------------:|:----------------------------------------------------------------:|
+|First CP Cleared |first checkpoint passed                                           |
+|CP Cleared       |passing a checkpoint (other than the first and last on the track) |
+|Lap Cleared      |complete lap                                                      |
+|Track Cleared    |end of the race. You need to stop the car and the simulation      |
+
 
 VALUE_ID/CODE_STR correspondance:
 
-```
-VALUE_ID     CODE_STR
-0            Simulation has not been launched
-1            No errors so far
-2            Simulation running
-3            Error. No details can be provided atm
-5            Checkpoint error detected
-6            Network operation failure
-7            Server-side Error
-8            Client-side Error
-9            EOF reached
-10           Simulation was correctly ended
-11           Empty command
-12           Unknown command
-13           Wrong arguments provided. Please refer to protocol
-14           Too many args provided with the command. Please refer to protocol
-15           Pipeline failure
-16           Unexpected command argument’s value
-17           Camera infoget failure
-18           Command not found
-19           Simulation already up and running
-20           CYCLE_DONE
-21           Sensor reading failure
-22           Scene must contain at least 3 CPs
-23           Timer Init Failure
-24           Timer get Failure
-25           Failed to load Map
-```
+|VALUE_ID |                               CODE_STR                            |
+|:-------:|:-----------------------------------------------------------------:|
+|0        | Simulation has not been launched                                  |
+|1        | No errors so far                                                  |
+|2        | Simulation running                                                |
+|3        | Error. No details can be provided atm                             |
+|5        | Checkpoint error detected                                         |
+|6        | Network operation failure                                         |
+|7        | Server-side Error                                                 |
+|8        | Client-side Error                                                 |
+|9        | EOF reached                                                       |
+|10       | Simulation was correctly ended                                    |
+|11       | Empty command                                                     |
+|12       | Unknown command                                                   |
+|13       | Wrong arguments provided. Please refer to protocol                |
+|14       | Too many args provided with the command. Please refer to protocol |
+|15       | Pipeline failure                                                  |
+|16       | Unexpected command argument’s value                               |
+|17       | Camera infoget failure                                            |
+|18       | Command not found                                                 |
+|19       | Simulation already up and running                                 |
+|20       | CYCLE_DONE                                                        |
+|21       | Sensor reading failure                                            |
+|22       | Scene must contain at least 3 CPs                                 |
+|23       | Timer Init Failure                                                |
+|24       | Timer get Failure                                                 |
+|25       | Failed to load Map                                                |
+
 ### EXAMPLE
 
 Here’s an example of the _n4s_ binary usage in standalone, in order to test the API:
