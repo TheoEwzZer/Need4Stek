@@ -1,21 +1,21 @@
 # Need4Stek
 
-```
+```text
 binary name : ai
 language : C
 compilation : via Makefile, including re, clean and fclean rules
 ```
 
-```
+```text
 For this project, all of the libC and libmath functions are authorized.
 ```
+
 By now you’ve understood that it’s now your turn to create your own autonomous car. It must be capable of driving on a track without hitting the walls or driving in the wrong direction.
-In order to help you with this task, several tools are avaible:
+In order to help you with this task, several tools are available:
 
 - CoppeliaSim is a simulator created by Coppelia Robotics. It enables the creation and control of robots. For this project, we have built a virtual track and car that you will use to implement for AI. You will find, further on in this document, how to install/use this software on your machine,
 - an API (binary name: n4s). It is a communication interface that offers an array of actions that you can use (start a simulation, set the car motor’s speed, wheel angle,...). You can also use it alone in order to test the communication protocol on the command line. This communication protocol is defined further on,
 - a shell script (binary name: pipes.sh) that enables you to connect your program to the API and launch simulations. It’s a binary that you will run in order to test your AI. Its utilization is also presented further on.
-
 
 ## COPPELIASIM
 
@@ -24,10 +24,10 @@ In order to help you with this task, several tools are avaible:
 Download [CoppeliaSim Edu V4.3.0](https://www.coppeliarobotics.com/files/CoppeliaSim_Edu_V4_3_0_Ubuntu20_04.tar.xz) (the assets provided for the project function solely with Linux and Mac).
 In order to launch CoppeliaSim, you need to execute the onboard script:
 
-
-```bash
+```text
 ∼/B-AIA-200> ./coppeliaSim.sh
 ```
+
 ### SCENE
 
 Download and then unzip the latest version of the _B-CPE-201_Need4stek_package.tgz_ from the intranet (file provided with the project description).
@@ -35,7 +35,7 @@ Miscellaneous “.ttt” files are located in the “scene” file. These are th
 As far as we’re concerned, they contain the track and the car to be driven.
 Before beginning your simulations, you must systematically open the **track_1.ttt** scene (or every other scene that you have made yourself) that is located in the CoppeliaSim (drag ’n drop or via the “File > Open scene...” menu).
 
-```
+```text
 Make sure, when starting the CoppeliaSim,
 that the selected physics engine is the ODE.
 The car will perform best in this mode.
@@ -44,7 +44,7 @@ Menu: Simulation -> Using the ODE physics engine
 
 ## API
 
-### OVERRAL FUNCTIONNING
+### OVERALL FUNCTIONING
 
 The _n4s_ binary enables communication with CoppeliaSim (via a socket in C) and controls each of the elements that we have put in our scene.
 It reads the commands sent to it on the standard input, carries out the task, and responds by writing on the standard output.
@@ -71,23 +71,23 @@ The communication is done via a text-type protocol:
 | GET_CAR_SPEED_MIN   |      -      |     (3)     |
 | GET_INFO_SIMTIME    |      -      |     (3)     |
 
-```
+```text
 All the commands ends with \n and inevitably lead to an answer.
 If n4s doesn’t receive a command, it won’t send out an answer.
 Commands are not case sensitive.
 ```
+
 For example, CAR_FORWARD takes a parameter that does indicate the engine power you want to drive with (and not absolute speed):
 `CAR_FORWARD:0.5\n`makes the car move forward at half of its maximum speed.
-
 
 ### RESPONSES
 
 Here are the different answer formats, corresponding to each type:
 
-- (1): VALUE_ID:STATUS:CODE_STR:ADDITIONNAL_INFO
-- (2): VALUE_ID:STATUS:CODE_STR[:float]*32:ADDITIONNAL_INFO
-- (3): VALUE_ID:STATUS:CODE_STR:float:ADDITIONNAL_INFO
-- (4): VALUE_ID:STATUS:CODE_STR:[long,long]:ADDITIONNAL_INFO
+- (1): VALUE_ID:STATUS:CODE_STR:ADDITIONAL_INFO
+- (2): VALUE_ID:STATUS:CODE_STR[:float]*32:ADDITIONAL_INFO
+- (3): VALUE_ID:STATUS:CODE_STR:float:ADDITIONAL_INFO
+- (4): VALUE_ID:STATUS:CODE_STR:[long,long]:ADDITIONAL_INFO
 
 **VALUE_ID** indicates the response code. The different values are listed below.
 **STATUS** is whether “OK” or “KO”. It indicates if the command execution is a success or a failure.
@@ -101,8 +101,7 @@ Here are the different answer formats, corresponding to each type:
 |Lap Cleared      |complete lap                                                      |
 |Track Cleared    |end of the race. You need to stop the car and the simulation      |
 
-
-VALUE_ID/CODE_STR correspondance:
+VALUE_ID/CODE_STR correspondence:
 
 |VALUE_ID |                               CODE_STR                            |
 |:-------:|:-----------------------------------------------------------------:|
@@ -136,8 +135,7 @@ VALUE_ID/CODE_STR correspondance:
 
 Here’s an example of the _n4s_ binary usage in standalone, in order to test the API:
 
-
-```bash
+```text
 ∼/B-AIA-200> ./n4s
 start_simulation
 2:OK:Simulation running:No further info
