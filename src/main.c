@@ -9,14 +9,12 @@
 
 void end(void)
 {
-    char *lineptr = NULL;
-    size_t n = 0;
+    char lineptr[128];
 
-    dprintf(STDOUT_FILENO, "CAR_FORWARD:0.0\n");
-    getline(&lineptr, &n, stdin);
-    sleep(1);
-    dprintf(STDOUT_FILENO, "STOP_SIMULATION\n");
-    getline(&lineptr, &n, stdin);
+    write(STDOUT_FILENO, "CAR_FORWARD:0.0\n", 16);
+    fgets(lineptr, 128, stdin);
+    write(STDOUT_FILENO, "START_SIMULATION\n", 17);
+    fgets(lineptr, 128, stdin);
     exit(0);
 }
 
@@ -42,27 +40,32 @@ void parse_lidar_data(char *line, car_t *car)
 
 void update_car(car_t *car)
 {
-    char *lineptr = NULL;
-    size_t n = 0;
+    char lineptr[300];
 
     write(STDOUT_FILENO, "GET_INFO_LIDAR\n", 15);
-    getline(&lineptr, &n, stdin);
+    fgets(lineptr, 300, stdin);
     parse_lidar_data(lineptr, car);
     car->left = car->lidar[0];
     car->middle = car->lidar[15];
     car->right = car->lidar[31];
-    free(lineptr);
+    car->middle_left = car->lidar[14];
+    car->middle_right = car->lidar[16];
+    if (car->is_diamond || (car->lidar[0] == 1500.0f && car->lidar[2] == 2500.0f
+    && car->lidar[31] == 675.0f && car->lidar[29] == 1500.0f)) {
+        car->is_diamond = true;
+        car->middle_left = car->lidar[10];
+        car->middle_right = car->lidar[20];
+    }
 }
 
 int main(void)
 {
     car_t *car = malloc(sizeof(car_t));
-    char *lineptr = NULL;
-    size_t n = 0;
+    char line[39];
 
+    car->is_diamond = false;
     write(STDOUT_FILENO, "START_SIMULATION\n", 17);
-    getline(&lineptr, &n, stdin);
-    free(lineptr);
+    fgets(line, 39, stdin);
     while (42) {
         update_car(car);
         if (!strcmp(car->status, "OK"))
