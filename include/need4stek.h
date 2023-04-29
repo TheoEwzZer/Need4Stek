@@ -16,17 +16,21 @@
     #include <unistd.h>
 
 typedef struct car_s {
+    bool is_diamond;
     char *status;
     float current_speed;
     float current_wheels_direction;
     float left;
     float lidar[32];
     float middle;
+    float middle_left;
+    float middle_right;
     float right;
 } car_t;
 
 float calculate_speed(car_t *car);
 float calculate_wheels_direction(car_t *car);
+void avoid_wall(car_t *car);
 void check_end(car_t *car);
 void control_car(car_t *car);
 void end(void) __attribute__((noreturn));
