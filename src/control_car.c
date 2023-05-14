@@ -41,20 +41,6 @@ float calculate_speed(car_t *car)
     return speed[8];
 }
 
-void check_end(car_t *car)
-{
-    bool can_stop = true;
-
-    for (unsigned int i = 0; i < 32; i++) {
-        if (car->lidar[i] > 90.0f) {
-            can_stop = false;
-            break;
-        }
-    }
-    if (can_stop)
-        end();
-}
-
 void avoid_wall(car_t *car)
 {
     float wheels_dir = 0.0f;
@@ -83,7 +69,6 @@ void control_car(car_t *car)
     avoid_wall(car);
     speed = calculate_speed(car);
     wheels_dir = calculate_wheels_direction(car);
-    check_end(car);
     if (speed != car->current_speed) {
         dprintf(STDOUT_FILENO, "CAR_FORWARD:%.1f\n", (double)speed);
         fgets(lineptr, 100, stdin);
