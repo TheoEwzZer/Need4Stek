@@ -31,7 +31,6 @@ typedef struct car_s {
 float calculate_speed(car_t *car);
 float calculate_wheels_direction(car_t *car);
 void avoid_wall(car_t *car);
-void check_end(car_t *car);
 void control_car(car_t *car);
 void end(void) __attribute__((noreturn));
 void parse_lidar_data(char *line, car_t *car);
