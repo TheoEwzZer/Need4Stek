@@ -170,3 +170,16 @@ They give, in seconds and nanoseconds, the time that has passed since START_SIMU
 **What is the evaluation really looking for?**
 An AI that is able to do laps, rather quickly, on the track (to give you a hint, tell yourself that a lap done in 5 minutes on a small track is much too slow). We’re also looking to see that your AI will stop driving and terminate the simulation in a dead-end. In this case, it must stop at least three feet from the wall, without
 touching it, before terminating the simulation.
+
+## Final Mark
+
+### Mark: 22 / 22 (100.0%)
+
+- Preliminary (2 / 2)
+- VREP or CoppeliaSim in the repository? (0 / 0)
+- track_1 (5 / 5)
+- track_2 (5 / 5)
+- track_3 (5 / 5)
+- criss_cross (2 / 2)
+- diamond_bonus (1 / 1)
+- 8_bonus (2 / 2)
